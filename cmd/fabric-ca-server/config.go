@@ -25,9 +25,9 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/hyperledger/fabric-ca/lib"
-	"github.com/hyperledger/fabric-ca/lib/metadata"
-	"github.com/hyperledger/fabric-ca/util"
+	"github.com/chengfangang/fabric-ca-gm/lib"
+	"github.com/chengfangang/fabric-ca-gm/lib/metadata"
+	"github.com/chengfangang/fabric-ca-gm/util"
 )
 
 const (
@@ -362,8 +362,8 @@ csr:
 # crypto library implementation to use
 #############################################################################
 bccsp:
-    default: SW
-    sw:
+    default: GM
+    gmca:
         hash: SHA2
         security: 256
         filekeystore:
