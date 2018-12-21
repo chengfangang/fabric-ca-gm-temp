@@ -176,6 +176,12 @@ type Response struct {
 	Messages []ResponseMessage `json:"messages"`
 }
 
+type SuperResponse struct {
+	Success  bool			    `json:"success"`
+	Result   interface{}        `json:"result"`
+	Errors   []ResponseMessage  `json:"errors"`
+	Messages []ResponseMessage  `json:"messages"`
+}
 // NewSuccessResponse is a shortcut for creating new successul API
 // responses.
 func NewSuccessResponse(result interface{}) Response {
