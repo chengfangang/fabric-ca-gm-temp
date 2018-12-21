@@ -78,8 +78,13 @@ func (h HTTPHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if match {
+		log.Infof("h = %+v\n", h)
+		log.Infof("w = %+v\n", w)
+		log.Info("r = %+v\n", r)
+
 		err = h.Handle(w, r)
 	} else {
+		log.Infof("not match")
 		err = errors.NewMethodNotAllowed(r.Method)
 	}
 	status := HandleError(w, err)
@@ -177,11 +182,12 @@ type Response struct {
 }
 
 type SuperResponse struct {
-	Success  bool			    `json:"success"`
-	Result   interface{}        `json:"result"`
-	Errors   []ResponseMessage  `json:"errors"`
-	Messages []ResponseMessage  `json:"messages"`
+	Success  bool              `json:"success"`
+	Result   interface{}       `json:"result"`
+	Errors   []ResponseMessage `json:"errors"`
+	Messages []ResponseMessage `json:"messages"`
 }
+
 // NewSuccessResponse is a shortcut for creating new successul API
 // responses.
 func NewSuccessResponse(result interface{}) Response {

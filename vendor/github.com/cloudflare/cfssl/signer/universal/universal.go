@@ -190,11 +190,7 @@ func (s *Signer) Info(req info.Req) (resp *info.Resp, err error) {
 // SetDBAccessor sets the signer's cert db accessor.
 func (s *Signer) SetDBAccessor(dba certdb.Accessor) {
 	s.local.SetDBAccessor(dba)
-}
-
-// GetDBAccessor returns the signer's cert db accessor.
-func (s *Signer) GetDBAccessor() certdb.Accessor {
-	return s.local.GetDBAccessor()
+	s.remote.SetDBAccessor(dba)
 }
 
 // SetReqModifier sets the function to call to modify the HTTP request prior to sending it

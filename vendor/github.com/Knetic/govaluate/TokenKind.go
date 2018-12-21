@@ -17,7 +17,6 @@ const (
 	VARIABLE
 	FUNCTION
 	SEPARATOR
-	ACCESSOR
 
 	COMPARATOR
 	LOGICALOP
@@ -33,7 +32,7 @@ const (
 	GetTokenKindString returns a string that describes the given TokenKind.
 	e.g., when passed the NUMERIC TokenKind, this returns the string "NUMERIC".
 */
-func (kind TokenKind) String() string {
+func GetTokenKindString(kind TokenKind) string {
 
 	switch kind {
 
@@ -67,8 +66,6 @@ func (kind TokenKind) String() string {
 		return "CLAUSE_CLOSE"
 	case TERNARY:
 		return "TERNARY"
-	case ACCESSOR:
-		return "ACCESSOR"
 	}
 
 	return "UNKNOWN"

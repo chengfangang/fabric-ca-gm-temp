@@ -17,8 +17,7 @@ export GOPATH="${TEMPORARY_PATH}"
 pushd "${TEMPORARY_PATH}/src/govaluate"
 
 # run the actual tests.
-export GOVALUATE_TORTURE_TEST="true"
-go test -bench=. -benchmem #-coverprofile coverage.out
+go test -bench=. -benchmem -coverprofile coverage.out
 status=$?
 
 if [ "${status}" != 0 ];
@@ -26,8 +25,6 @@ then
 	exit $status
 fi
 
-# coverage
-# disabled because travis go1.4 seems not to support it suddenly?
-#go tool cover -func=coverage.out
+go tool cover -func=coverage.out
 
 popd

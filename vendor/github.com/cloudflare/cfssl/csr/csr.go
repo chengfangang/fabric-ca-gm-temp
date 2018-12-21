@@ -55,12 +55,15 @@ type BasicKeyRequest struct {
 // NewBasicKeyRequest returns a default BasicKeyRequest.
 func NewBasicKeyRequest() *BasicKeyRequest {
 	return &BasicKeyRequest{"ecdsa", curveP256}
+	//return &BasicKeyRequest{"gmsm2", curveP256}
 }
 
-// NewGMKeyRequest returns a default BasicKeyRequest
+// NewGMKeyRequest returns a default BasicKeyRequest.
 func NewGMKeyRequest() *BasicKeyRequest {
+	//return &BasicKeyRequest{"ecdsa", curveP256}
 	return &BasicKeyRequest{"gmsm2", curveP256}
 }
+
 // Algo returns the requested key algorithm represented as a string.
 func (kr *BasicKeyRequest) Algo() string {
 	return kr.A
@@ -411,6 +414,7 @@ func Generate(priv crypto.Signer, req *CertificateRequest) (csr []byte, err erro
 
 	log.Info("encoded CSR")
 	csr = pem.EncodeToMemory(&block)
+	log.Info("encoded CSR end")
 	return
 }
 

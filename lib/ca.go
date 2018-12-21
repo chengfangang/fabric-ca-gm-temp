@@ -355,7 +355,8 @@ func (ca *CA) getCACert() (cert []byte, err error) {
 			CN:           csr.CN,
 			Names:        csr.Names,
 			Hosts:        csr.Hosts,
-			KeyRequest:   &cfcsr.BasicKeyRequest{A: csr.KeyRequest.Algo, S: csr.KeyRequest.Size},
+			//KeyRequest:   &cfcsr.BasicKeyRequest{A: csr.KeyRequest.Algo, S: csr.KeyRequest.Size},
+			KeyRequest:   csr.KeyRequest,
 			CA:           csr.CA,
 			SerialNumber: csr.SerialNumber,
 		}
