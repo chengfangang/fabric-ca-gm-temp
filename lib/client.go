@@ -34,11 +34,11 @@ import (
 	cfsslapi "github.com/cloudflare/cfssl/api"
 	"github.com/cloudflare/cfssl/csr"
 	"github.com/cloudflare/cfssl/log"
-	"github.com/hyperledger/fabric-ca/api"
-	"github.com/hyperledger/fabric-ca/lib/streamer"
-	"github.com/hyperledger/fabric-ca/lib/tls"
-	"github.com/hyperledger/fabric-ca/util"
-	"github.com/hyperledger/fabric/bccsp"
+	"github.com/chengfangang/fabric-ca-gm/api"
+	"github.com/chengfangang/fabric-ca-gm/lib/streamer"
+	"github.com/chengfangang/fabric-ca-gm/lib/tls"
+	"github.com/chengfangang/fabric-ca-gm/util"
+	"github.com/tjfoc/fabric-ca-gm/bccsp"
 	"github.com/mitchellh/mapstructure"
 )
 
@@ -105,6 +105,7 @@ func (c *Client) Init() error {
 		// Successfully initialized the client
 		c.initialized = true
 	}
+	SetProviderName(c.Config.CSP.ProviderName)
 	return nil
 }
 
@@ -266,7 +267,11 @@ func (c *Client) GenCSR(req *api.CSRInfo, id string) ([]byte, bccsp.Key, error) 
 	cr.CN = id
 
 	if cr.KeyRequest == nil {
-		cr.KeyRequest = newCfsslBasicKeyRequest(api.NewBasicKeyRequest())
+		if IsGMConfig() {
+			cr.KeyRequest = csr.NewGMKeyRequest()
+		} else {
+			cr.KeyRequest = newCfsslBasicKeyRequest(api.NewBasicKeyRequest())
+		}
 	}
 
 	key, cspSigner, err := util.BCCSPKeyRequestGenerate(cr, c.csp)
@@ -275,7 +280,13 @@ func (c *Client) GenCSR(req *api.CSRInfo, id string) ([]byte, bccsp.Key, error) 
 		return nil, nil, err
 	}
 
-	csrPEM, err := csr.Generate(cspSigner, cr)
+	var csrPem []byte
+	if IsGMConfig() {
+		csrPEM, err = generate(cspSigner, cr, key)
+	} else {
+		csrPEM, err = csr.Generate(cspSigner, cr)
+	}
+
 	if err != nil {
 		log.Debugf("failed generating CSR: %s", err)
 		return nil, nil, err

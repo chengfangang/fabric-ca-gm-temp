@@ -27,7 +27,7 @@ import (
 	"github.com/cloudflare/cfssl/certdb"
 	certsql "github.com/cloudflare/cfssl/certdb/sql"
 	"github.com/cloudflare/cfssl/log"
-	"github.com/hyperledger/fabric-ca/util"
+	"github.com/chengfangang/fabric-ca-gm/util"
 	"github.com/kisielk/sqlstruct"
 
 	"github.com/jmoiron/sqlx"

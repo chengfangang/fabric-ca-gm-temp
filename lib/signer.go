@@ -21,9 +21,9 @@ import (
 	"fmt"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/hyperledger/fabric-ca/api"
-	"github.com/hyperledger/fabric-ca/util"
-	"github.com/hyperledger/fabric/bccsp"
+	"github.com/chengfangang/fabric-ca-gm/api"
+	"github.com/chengfangang/fabric-ca-gm/util"
+	"github.com/tjfoc/hyperledger-fabric-gm/bccsp"
 	"github.com/hyperledger/fabric/common/attrmgr"
 )
 

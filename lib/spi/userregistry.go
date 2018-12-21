@@ -21,7 +21,7 @@ limitations under the License.
 package spi
 
 import (
-	"github.com/hyperledger/fabric-ca/api"
+	"github.com/chengfangang/fabric-ca-gm/api"
 	"github.com/jmoiron/sqlx"
 )
 

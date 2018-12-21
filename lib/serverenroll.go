@@ -29,9 +29,10 @@ import (
 	cferr "github.com/cloudflare/cfssl/errors"
 	"github.com/cloudflare/cfssl/log"
 	"github.com/cloudflare/cfssl/signer"
-	"github.com/hyperledger/fabric-ca/api"
-	"github.com/hyperledger/fabric-ca/lib/spi"
-	"github.com/hyperledger/fabric-ca/util"
+	"github.com/chengfangang/fabric-ca-gm/api"
+	"github.com/chengfangang/fabric-ca-gm/lib/spi"
+	"github.com/chengfangang/fabric-ca-gm/util"
+	"github.com/tjfoc/gmsm/sm2"
 )
 
 const (
@@ -161,7 +162,9 @@ func handleEnroll(ctx *serverRequestContext, id string) (interface{}, error) {
 		req.Extensions = append(req.Extensions, *ext)
 	}
 	// Sign the certificate
-	cert, err := ca.enrollSigner.Sign(req.SignRequest)
+	var cert []byte
+	cert, err = signCert(req.SignRequest, sh.server.caMap[caname])
+	
 	if err != nil {
 		return nil, errors.WithMessage(err, "Certificate signing failure")
 	}
@@ -195,7 +198,16 @@ func processSignRequest(id string, req *signer.SignRequest, ca *CA, ctx *serverR
 		return cferr.Wrap(cferr.CSRError,
 			cferr.BadRequest, errors.New("not a certificate or csr"))
 	}
-	csrReq, err := x509.ParseCertificateRequest(block.Bytes)
+	var csrReq *x509.CertificateRequest
+	var err error
+	if IsGMConfig() {
+		sm2csrReq, err := sm2.ParseCertificateRequest(block.Bytes)
+		if err == nil {
+			csrReq = ParseSm2CertificateRequest2X509(sm2csrReq)
+		}
+	} else {
+		csrReq, err := x509.ParseCertificateRequest(block.Bytes)
+	}
 	if err != nil {
 		return err
 	}

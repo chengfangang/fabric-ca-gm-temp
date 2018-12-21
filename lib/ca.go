@@ -40,15 +40,18 @@ import (
 	"github.com/cloudflare/cfssl/log"
 	"github.com/cloudflare/cfssl/signer"
 	cflocalsigner "github.com/cloudflare/cfssl/signer/local"
-	"github.com/hyperledger/fabric-ca/api"
-	"github.com/hyperledger/fabric-ca/lib/dbutil"
-	"github.com/hyperledger/fabric-ca/lib/ldap"
-	"github.com/hyperledger/fabric-ca/lib/metadata"
-	"github.com/hyperledger/fabric-ca/lib/spi"
-	"github.com/hyperledger/fabric-ca/lib/tcert"
-	"github.com/hyperledger/fabric-ca/lib/tls"
-	"github.com/hyperledger/fabric-ca/util"
-	"github.com/hyperledger/fabric/bccsp"
+	"github.com/chengfangang/fabric-ca-gm/api"
+	"github.com/chengfangang/fabric-ca-gm/lib/dbutil"
+	"github.com/chengfangang/fabric-ca-gm/lib/ldap"
+	"github.com/chengfangang/fabric-ca-gm/lib/metadata"
+	"github.com/chengfangang/fabric-ca-gm/lib/spi"
+	"github.com/chengfangang/fabric-ca-gm/lib/tcert"
+	"github.com/chengfangang/fabric-ca-gm/lib/tls"
+	"github.com/chengfangang/fabric-ca-gm/util"
+	//"github.com/hyperledger/fabric/bccsp"
+	"github.com/tjfoc/hyperledger-fabric-gm/bccsp"
+	"github.com/tjfoc/hyperledger-fabric-gm/bccsp/gm"
+	//TODO: Conflicts with hyperledger fabric
 	"github.com/hyperledger/fabric/common/attrmgr"
 	"github.com/jmoiron/sqlx"
 )
@@ -147,6 +150,7 @@ func (ca *CA) init(renew bool) (err error) {
 	// Initialize the config, setting defaults, etc
 	ca.dbInitialized = false
 
+	SetProviderName(ca.Config.CSP.ProviderName)
 	err = ca.initConfig()
 	if err != nil {
 		return err
@@ -340,7 +344,11 @@ func (ca *CA) getCACert() (cert []byte, err error) {
 			csr.CA.Expiry = defaultRootCACertificateExpiration
 		}
 		if csr.KeyRequest == nil {
-			csr.KeyRequest = GetKeyRequest(ca.Config)
+			if IsGMConfig() {
+				csr.KeyRequest = cfcsr.NewGMKeyRequest()
+			} else {
+				csr.KeyRequest = GetKeyRequest(ca.Config)
+			}
 		}
 		req := cfcsr.CertificateRequest{
 			CN:           csr.CN,
@@ -352,12 +360,16 @@ func (ca *CA) getCACert() (cert []byte, err error) {
 		}
 		log.Debugf("Root CA certificate request: %+v", req)
 		// Generate the key/signer
-		_, cspSigner, err := util.BCCSPKeyRequestGenerate(&req, ca.csp)
+		key, cspSigner, err := util.BCCSPKeyRequestGenerate(&req, ca.csp)
 		if err != nil {
 			return nil, err
 		}
 		// Call CFSSL to initialize the CA
-		cert, _, err = initca.NewFromSigner(&req, cspSigner)
+		if IsGMConfig() {
+			cert, err = createGmSm2Cert(key, &req, cspSigner)
+		} else {
+			cert, _, err = initca.NewFromSigner(&req, cspSigner)
+		}
 		if err != nil {
 			return nil, errors.WithMessage(err, "Failed to create new CA certificate")
 		}
@@ -479,14 +491,44 @@ func (ca *CA) initConfig() (err error) {
 	return nil
 }
 
+func getVerifyOptions(ca *CA) (*sm2.VerifyOptions, error) {
+	chain, err := ca.getCAChain()
+	if err != nil {
+		return nil, err
+	}
+	block, rest := pem.Decode(chain)
+	if block == nil {
+		return nil, errors.New("No root certificate was found")
+	}
+	rootCert, err := sm2.ParseCertificate(block.Bytes)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to parse root certificate: %s", err)
+	}
+	rootPool := sm2.NewCertPool()
+	rootPool.AddCert(rootCert)
+	var intPool *sm2.CertPool
+	if len(rest) > 0 {
+		intPool = sm2.NewCertPool()
+		if !intPool.AppendCertsFromPEM(rest) {
+			return nil, errors.New("Failed to add intermediate PEM certificates")
+		}
+	}
+	return &sm2.VerifyOptions{
+		Roots:         rootPool,
+		Intermediates: intPool,
+		KeyUsages:     []sm2.ExtKeyUsage{sm2.ExtKeyUsageAny},
+	}, nil
+}
+
 // VerifyCertificate verifies that 'cert' was issued by this CA
 // Return nil if successful; otherwise, return an error.
 func (ca *CA) VerifyCertificate(cert *x509.Certificate) error {
-	opts, err := ca.getVerifyOptions()
+	sm2Cert := gm.ParseX509Certificate2Sm2(cert)
+	opts, err := getVerifyOptions(ca)
 	if err != nil {
 		return errors.WithMessage(err, "Failed to get verify options")
 	}
-	_, err = cert.Verify(*opts)
+	_, err = sm2Cert.Verify(*opts)
 	if err != nil {
 		return errors.WithMessage(err, "Failed to verify certificate")
 	}
