@@ -22,8 +22,8 @@ import (
 
 	"github.com/cloudflare/cfssl/log"
 
-	"github.com/chengfangang/fabric-ca/api"
-	"github.com/chengfangang/fabric-ca/util"
+	"github.com/chengfangang/fabric-ca-gm/api"
+	"github.com/chengfangang/fabric-ca-gm/util"
 )
 
 type revocationResponseNet struct {

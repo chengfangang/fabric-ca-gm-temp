@@ -49,6 +49,7 @@ import (
 	"github.com/chengfangang/fabric-ca-gm/lib/tls"
 	"github.com/chengfangang/fabric-ca-gm/util"
 	//"github.com/hyperledger/fabric/bccsp"
+	"github.com/tjfoc/gmsm/sm2"
 	"github.com/tjfoc/hyperledger-fabric-gm/bccsp"
 	"github.com/tjfoc/hyperledger-fabric-gm/bccsp/gm"
 	//TODO: Conflicts with hyperledger fabric

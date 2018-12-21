@@ -38,7 +38,7 @@ import (
 	"github.com/chengfangang/fabric-ca-gm/lib/streamer"
 	"github.com/chengfangang/fabric-ca-gm/lib/tls"
 	"github.com/chengfangang/fabric-ca-gm/util"
-	"github.com/tjfoc/fabric-ca-gm/bccsp"
+	"github.com/tjfoc/hyperledger-fabric-gm/bccsp"
 	"github.com/mitchellh/mapstructure"
 )
 
@@ -280,7 +280,7 @@ func (c *Client) GenCSR(req *api.CSRInfo, id string) ([]byte, bccsp.Key, error) 
 		return nil, nil, err
 	}
 
-	var csrPem []byte
+	var csrPEM []byte
 	if IsGMConfig() {
 		csrPEM, err = generate(cspSigner, cr, key)
 	} else {

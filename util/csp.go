@@ -30,6 +30,7 @@ import (
 	_ "time" // for ocspSignerFromConfig
 
 	"github.com/pkg/errors"
+	"github.com/tjfoc/gmsm/sm2"
 
 	_ "github.com/cloudflare/cfssl/cli" // for ocspSignerFromConfig
 	"github.com/cloudflare/cfssl/config"
@@ -41,6 +42,7 @@ import (
 	"github.com/cloudflare/cfssl/signer/local"
 	"github.com/tjfoc/hyperledger-fabric-gm/bccsp"
 	"github.com/tjfoc/hyperledger-fabric-gm/bccsp/factory"
+	"github.com/tjfoc/hyperledger-fabric-gm/bccsp/gm"
 	cspsigner "github.com/tjfoc/hyperledger-fabric-gm/bccsp/signer"
 	"github.com/tjfoc/hyperledger-fabric-gm/bccsp/utils"
 )
