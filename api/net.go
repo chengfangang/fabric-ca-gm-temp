@@ -26,6 +26,9 @@ import (
  * and the fabric-ca server.
  */
 
+type QuerymentResponseNet struct {
+	QuerymentRespone
+}
 // RegistrationRequestNet is the registration request for a new identity
 type RegistrationRequestNet struct {
 	RegistrationRequest
