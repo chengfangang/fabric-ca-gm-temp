@@ -18,7 +18,7 @@ limitations under the License.
 
 package lib
 
-import "github.com/hyperledger/fabric-ca/api"
+import "github.com/chengfangang/fabric-ca-gm/api"
 
 // GetKeyRequest constructs and returns api.BasicKeyRequest object based on the bccsp
 // configuration options

@@ -17,7 +17,7 @@ limitations under the License.
 package lib
 
 import (
-	"github.com/hyperledger/fabric-ca/lib/metadata"
+	"github.com/chengfangang/fabric-ca-gm/lib/metadata"
 )
 
 // The response to the GET /info request

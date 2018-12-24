@@ -22,9 +22,9 @@ import (
 	"strings"
 
 	"github.com/cloudflare/cfssl/log"
-	"github.com/hyperledger/fabric-ca/api"
-	"github.com/hyperledger/fabric-ca/lib/attr"
-	"github.com/hyperledger/fabric-ca/lib/spi"
+	"github.com/chengfangang/fabric-ca-gm/api"
+	"github.com/chengfangang/fabric-ca-gm/lib/attr"
+	"github.com/chengfangang/fabric-ca-gm/lib/spi"
 	"github.com/pkg/errors"
 )
 

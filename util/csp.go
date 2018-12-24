@@ -206,7 +206,7 @@ func GetSignerFromCertFile(certFile string, csp bccsp.BCCSP) (bccsp.Key, crypto.
 	}
 
     cert, err := helpers.ParseCertificatePEM(certBytes)
-		if err != nil || cert == nil {
+	if err != nil || cert == nil {
 		sm2Cert, err := sm2.ReadCertificateFromPem(certFile)
 		if err != nil {
 			return nil, nil, nil, err
@@ -214,6 +214,7 @@ func GetSignerFromCertFile(certFile string, csp bccsp.BCCSP) (bccsp.Key, crypto.
 
 		cert = gm.ParseSm2Certificate2X509(sm2Cert)
 	}
+
 	key, cspSigner, err := GetSignerFromCert(cert, csp)
 	log.Infof("+++++++++++++KEY = %T", key)
 	return key, cspSigner, cert, err
