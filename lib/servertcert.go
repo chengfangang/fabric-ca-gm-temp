@@ -89,7 +89,7 @@ func genRootKey(csp bccsp.BCCSP) (bccsp.Key, error) {
 	if IsGMConfig() {
 		opts = &bccsp.GMSM2KeyGenOpts{Temporary: true}
 	} else {
-		opts := &bccsp.AES256KeyGenOpts{Temporary: true}
+		//opts := &bccsp.AES256KeyGenOpts{Temporary: true}
 	}
 	return csp.KeyGen(opts)
 }

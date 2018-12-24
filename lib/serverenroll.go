@@ -163,7 +163,7 @@ func handleEnroll(ctx *serverRequestContext, id string) (interface{}, error) {
 	}
 	// Sign the certificate
 	var cert []byte
-	cert, err = signCert(req.SignRequest, sh.server.caMap[caname])
+	cert, err = signCert(req.SignRequest, ca)
 	
 	if err != nil {
 		return nil, errors.WithMessage(err, "Certificate signing failure")
@@ -206,7 +206,7 @@ func processSignRequest(id string, req *signer.SignRequest, ca *CA, ctx *serverR
 			csrReq = ParseSm2CertificateRequest2X509(sm2csrReq)
 		}
 	} else {
-		csrReq, err := x509.ParseCertificateRequest(block.Bytes)
+		//csrReq, err := x509.ParseCertificateRequest(block.Bytes)
 	}
 	if err != nil {
 		return err

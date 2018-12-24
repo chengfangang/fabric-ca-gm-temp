@@ -214,7 +214,7 @@ func ParseSm2CertificateRequest2X509(sm2req *sm2.CertificateRequest) *x509.Certi
 		//
 		// The ExtraExtensions field is not populated when parsing CSRs, see
 		// Extensions.
-		Extensions: sm2req.ExtraExtensions,
+		ExtraExtensions: sm2req.ExtraExtensions,
 
 		// Subject Alternate Name values.
 		DNSNames:       sm2req.DNSNames,

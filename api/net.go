@@ -17,6 +17,7 @@ limitations under the License.
 package api
 
 import (
+	"time"
 	"github.com/cloudflare/cfssl/signer"
 )
 
@@ -43,6 +44,7 @@ type RegistrationResponseNet struct {
 type EnrollmentRequestNet struct {
 	signer.SignRequest
 	CAName   string
+	NotAfter time.Time
 	AttrReqs []*AttributeRequest `json:"attr_reqs,omitempty"`
 }
 
