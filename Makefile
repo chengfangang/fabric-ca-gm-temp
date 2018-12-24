@@ -37,7 +37,7 @@
 #   - dist-clean - cleans release packages for all target platforms
 #   - clean-all - cleans the build area and release packages
 
-PROJECT_NAME   = fabric-ca
+PROJECT_NAME   = fabric-gm-ca
 BASE_VERSION = 1.2.0
 PREV_VERSION = 1.1.0
 IS_RELEASE = false
@@ -60,7 +60,7 @@ PGVER=9.5
 endif
 
 BASEIMAGE_RELEASE = 0.4.6
-PKGNAME = github.com/hyperledger/$(PROJECT_NAME)
+PKGNAME = github.com/chengfangang/$(PROJECT_NAME)
 
 METADATA_VAR = Version=$(PROJECT_VERSION)
 
