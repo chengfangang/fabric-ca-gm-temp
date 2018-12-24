@@ -370,5 +370,5 @@ func NewBasicKeyRequest() *BasicKeyRequest {
 }
 
 func NewGMKeyRequest() *BasicKeyRequest {
-	return &BasicKeyRequest{Algo: "gmsm", Size: 256}
+	return &BasicKeyRequest{Algo: "gmsm2", Size: 256}
 }
